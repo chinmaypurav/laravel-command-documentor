@@ -9,7 +9,7 @@ it is very essential to share the latest commands with the latest signatures and
 ## Installation
 
 ```bash
-composer require chinmaypurav/laravel-command-documentor
+composer require chinmay/laravel-command-documentor
 ```
 
 To generate documents for all the commands in the application, run the following command:
