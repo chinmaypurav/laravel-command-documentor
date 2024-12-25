@@ -1,0 +1,22 @@
+{
+    "name": "chinmay/laravel-command-documentor",
+    "description": "Laravel Artisan Command Documentor",
+    "type": "library",
+    "require": {
+        "illuminate/support": "^9|^10|^11"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Chinmay\\LaravelCommandDocumentor\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Chinmay Purav",
+            "email": "chinpurav@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "version": "0.1.0"
+}
