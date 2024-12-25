@@ -3,7 +3,8 @@
     "description": "Laravel Artisan Command Documentor",
     "type": "library",
     "require": {
-        "illuminate/support": "^9|^10|^11"
+        "illuminate/support": "^9|^10|^11",
+        "illuminate/console": "^9|^10|^11"
     },
     "license": "MIT",
     "autoload": {
@@ -18,5 +19,12 @@
         }
     ],
     "minimum-stability": "dev",
-    "version": "0.1.0"
+    "version": "0.1.0",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Chinmay\\LaravelCommandDocumentor\\ServiceProvider"
+            ]
+        }
+    }
 }
