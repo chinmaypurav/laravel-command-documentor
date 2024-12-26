@@ -102,7 +102,7 @@ class DocumentCommand extends Command
 
     private function writeToFile(): void
     {
-        Storage::disk(config('documentor.output.disk'))
+        Storage::disk(Config::get('documentor.output.disk'))
             ->put($this->getFilePath(), $this->contents->toString());
     }
 }
