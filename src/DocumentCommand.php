@@ -34,7 +34,7 @@ class DocumentCommand extends Command
         $this->info('Documenting commands...');
 
         Artisan::call('list', [
-            '--format' => 'json'
+            '--format' => 'json',
         ]);
 
         $output = json_decode(Artisan::output(), true);
@@ -48,29 +48,24 @@ class DocumentCommand extends Command
             // namespace filter
             ->when(
                 Config::get('documentor.include.namespaces'),
-                fn (Collection $commands, array $namespaces) =>
-                    $commands->filter(fn (array $command) => Str::startsWith($command['name'], $namespaces))
+                fn (Collection $commands, array $namespaces) => $commands->filter(fn (array $command) => Str::startsWith($command['name'], $namespaces))
             )
             ->when(
                 Config::get('documentor.exclude.namespaces'),
-                fn (Collection $commands, array $namespaces) =>
-                    $commands->filter(fn (array $command) => ! Str::startsWith($command['name'], $namespaces))
+                fn (Collection $commands, array $namespaces) => $commands->filter(fn (array $command) => ! Str::startsWith($command['name'], $namespaces))
             )
             // signature filter
             ->when(
                 Config::get('documentor.include.signatures'),
-                fn (Collection $commands, array $signatures) =>
-                    $commands->filter(fn (array $command) => in_array($command['name'], $signatures)),
+                fn (Collection $commands, array $signatures) => $commands->filter(fn (array $command) => in_array($command['name'], $signatures)),
             )
             ->when(
                 Config::get('documentor.exclude.signatures'),
-                fn (Collection $commands, array $signatures) =>
-                    $commands->filter(fn (array $command) => ! in_array($command['name'], $signatures)),
+                fn (Collection $commands, array $signatures) => $commands->filter(fn (array $command) => ! in_array($command['name'], $signatures)),
             )
             ->each(function (array $command) {
                 $this->currentNamespace = '';
                 $namespace = $this->getNamespace($command['name']);
-
 
                 $table = $this->assortedCommands->get($namespace, Table::make($namespace));
 
@@ -97,9 +92,9 @@ class DocumentCommand extends Command
     private function getFilePath(): string
     {
         return Str::of(Config::get('documentor.output.path'))
-                ->append('/')
-                ->append(Config::get('documentor.output.filename'))
-                ->toString();
+            ->append('/')
+            ->append(Config::get('documentor.output.filename'))
+            ->toString();
     }
 
     private function writeToFile(): void
@@ -111,7 +106,6 @@ class DocumentCommand extends Command
     private function getNamespace(string $signature): string
     {
         $namespace = Str::before($signature, ':');
-
 
         if ($namespace === $signature) {
             return $this->currentNamespace;

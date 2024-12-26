@@ -40,21 +40,21 @@ class Table
         $markdown = Str::of('|');
 
         foreach ($this->headings as $heading) {
-            $markdown = $markdown->append(' ' . str_pad($heading, $this->rowDataLengths[$heading], ' ') . ' |');
+            $markdown = $markdown->append(' '.str_pad($heading, $this->rowDataLengths[$heading], ' ').' |');
         }
 
         $markdown = $markdown->newLine()->append('|');
         foreach ($this->rowDataLengths as $length) {
-            $markdown = $markdown->append($this->getDash($length + 2) . '|');
+            $markdown = $markdown->append($this->getDash($length + 2).'|');
         }
 
         $markdown = $markdown->newLine();
 
         foreach ($this->rows as $row) {
             $markdown = $markdown->append('|');
-            foreach ($row as $key =>  $item) {
+            foreach ($row as $key => $item) {
                 $length = $this->rowDataLengths[$this->headings[$key]];
-                $markdown = $markdown->append(' ' . str_pad($item, $length, ' ') . ' |');
+                $markdown = $markdown->append(' '.str_pad($item, $length, ' ').' |');
             }
             $markdown = $markdown->newLine();
         }
