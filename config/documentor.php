@@ -1,6 +1,9 @@
 <?php
 
 return [
+    /**
+     * List of command signatures to be excluded.
+     */
     'exclude' => [
         'hidden' => true,
 
