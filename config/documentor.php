@@ -19,10 +19,10 @@ return [
      */
     'include' => [
         'signatures' => [
-            // list of command signatures to be included
+            // list of command signatures ONLY to be included
         ],
         'namespaces' => [
-            // list of command namespaces to be included
+            // list of command namespaces ONLY to be included
         ],
     ],
 
