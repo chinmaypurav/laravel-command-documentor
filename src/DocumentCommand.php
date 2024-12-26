@@ -6,6 +6,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Support\Stringable;
@@ -36,7 +37,28 @@ class DocumentCommand extends Command
 
         collect(Arr::get($output, 'commands'))
             ->filter(fn(array $command) => ! $command['hidden'])
-            ->filter(fn(array $command) => ! in_array($command['name'], config('documentor.exclude', [])))
+            // Namespace filter
+            ->when(
+                Config::get('documentor.include.namespaces'),
+                fn(Collection $commands, array $namespaces) =>
+                    $commands->filter(fn(array $command) => Str::startsWith($command['name'], $namespaces))
+            )
+            ->when(
+                Config::get('documentor.exclude.namespaces'),
+                fn(Collection $commands, array $namespaces) =>
+                    $commands->filter(fn(array $command) => ! Str::startsWith($command['name'], $namespaces))
+            )
+            // Signature filter
+            ->when(
+                Config::get('documentor.include.signatures'),
+                fn(Collection $commands, array $signatures) =>
+                    $commands->filter(fn(array $command) => in_array($command['name'], $signatures)),
+            )
+            ->when(
+                Config::get('documentor.exclude.signatures'),
+                fn(Collection $commands, array $signatures) =>
+                    $commands->filter(fn(array $command) => ! in_array($command['name'], $signatures)),
+            )
             ->each(function (array $command) {
 
                 if (Str::doesntContain($command['name'], ':')) {
@@ -66,7 +88,10 @@ class DocumentCommand extends Command
 
     private function getFilePath(): string
     {
-        return config('documentor.output.path') . '/' . config('documentor.output.filename');
+        return Str::of(Config::get('documentor.output.path'))
+                ->append('/')
+                ->append(Config::get('documentor.output.filename'))
+                ->toString();
     }
 
     private function writeToFile(): void
