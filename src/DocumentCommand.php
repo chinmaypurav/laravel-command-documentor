@@ -23,6 +23,8 @@ class DocumentCommand extends Command
 
     protected Stringable $contents;
 
+    protected string $currentNamespace = '';
+
     public function handle(): void
     {
         $this->assortedCommands = Collection::make();
@@ -66,14 +68,11 @@ class DocumentCommand extends Command
                     $commands->filter(fn (array $command) => ! in_array($command['name'], $signatures)),
             )
             ->each(function (array $command) {
+                $this->currentNamespace = '';
+                $namespace = $this->getNamespace($command['name']);
 
-                if (Str::doesntContain($command['name'], ':')) {
-                    return;
-                }
 
-                $namespace = Str::before($command['name'], ':');
-
-                $table = $this->assortedCommands->get($namespace, Table::make());
+                $table = $this->assortedCommands->get($namespace, Table::make($namespace));
 
                 $table->addRow(
                     $command['name'],
@@ -84,7 +83,10 @@ class DocumentCommand extends Command
             });
 
         $this->assortedCommands->each(function (Table $table) {
-            $this->contents = $this->contents->append($table->renderMarkdown())->newLine(2);
+            $this->contents = $this->contents
+                ->append('## ', $table->namespace)
+                ->newLine(2)
+                ->append($table->renderMarkdown())->newLine();
         });
 
         $this->writeToFile();
@@ -104,5 +106,22 @@ class DocumentCommand extends Command
     {
         Storage::disk(Config::get('documentor.output.disk'))
             ->put($this->getFilePath(), $this->contents->toString());
+    }
+
+    private function getNamespace(string $signature): string
+    {
+        $namespace = Str::before($signature, ':');
+
+
+        if ($namespace === $signature) {
+            return $this->currentNamespace;
+        }
+
+        $this->currentNamespace = Str::of($this->currentNamespace)
+            ->append(':', $namespace)
+            ->ltrim(':')
+            ->toString();
+
+        return $this->getNamespace(Str::after($signature, ':'));
     }
 }
