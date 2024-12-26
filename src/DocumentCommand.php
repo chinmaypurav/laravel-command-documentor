@@ -36,28 +36,28 @@ class DocumentCommand extends Command
         $output = json_decode(Artisan::output(), true);
 
         collect(Arr::get($output, 'commands'))
-            ->filter(fn(array $command) => ! $command['hidden'])
+            ->filter(fn (array $command) => ! $command['hidden'])
             // Namespace filter
             ->when(
                 Config::get('documentor.include.namespaces'),
-                fn(Collection $commands, array $namespaces) =>
-                    $commands->filter(fn(array $command) => Str::startsWith($command['name'], $namespaces))
+                fn (Collection $commands, array $namespaces) =>
+                    $commands->filter(fn (array $command) => Str::startsWith($command['name'], $namespaces))
             )
             ->when(
                 Config::get('documentor.exclude.namespaces'),
-                fn(Collection $commands, array $namespaces) =>
-                    $commands->filter(fn(array $command) => ! Str::startsWith($command['name'], $namespaces))
+                fn (Collection $commands, array $namespaces) =>
+                    $commands->filter(fn (array $command) => ! Str::startsWith($command['name'], $namespaces))
             )
             // Signature filter
             ->when(
                 Config::get('documentor.include.signatures'),
-                fn(Collection $commands, array $signatures) =>
-                    $commands->filter(fn(array $command) => in_array($command['name'], $signatures)),
+                fn (Collection $commands, array $signatures) =>
+                    $commands->filter(fn (array $command) => in_array($command['name'], $signatures)),
             )
             ->when(
                 Config::get('documentor.exclude.signatures'),
-                fn(Collection $commands, array $signatures) =>
-                    $commands->filter(fn(array $command) => ! in_array($command['name'], $signatures)),
+                fn (Collection $commands, array $signatures) =>
+                    $commands->filter(fn (array $command) => ! in_array($command['name'], $signatures)),
             )
             ->each(function (array $command) {
 
@@ -77,8 +77,8 @@ class DocumentCommand extends Command
                 $this->assortedCommands->put($namespace, $table);
             });
 
-        $this->assortedCommands->each(function (Table $table){
-           $this->contents = $this->contents->append($table->renderMarkdown())->newLine(2);
+        $this->assortedCommands->each(function (Table $table) {
+            $this->contents = $this->contents->append($table->renderMarkdown())->newLine(2);
         });
 
         $this->writeToFile();

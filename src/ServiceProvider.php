@@ -20,7 +20,8 @@ class ServiceProvider extends BaseServiceProvider
     public function register(): void
     {
         $this->mergeConfigFrom(
-            __DIR__.'/../config/documentor.php', 'documentor'
+            __DIR__.'/../config/documentor.php',
+            'documentor'
         );
     }
 }
