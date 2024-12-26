@@ -36,8 +36,12 @@ class DocumentCommand extends Command
         $output = json_decode(Artisan::output(), true);
 
         collect(Arr::get($output, 'commands'))
-            ->filter(fn (array $command) => ! $command['hidden'])
-            // Namespace filter
+            // hidden filter
+            ->when(
+                Config::get('documentor.exclude.hidden'),
+                fn (Collection $commands) => $commands->filter(fn (array $command) => ! $command['hidden'])
+            )
+            // namespace filter
             ->when(
                 Config::get('documentor.include.namespaces'),
                 fn (Collection $commands, array $namespaces) =>
@@ -48,7 +52,7 @@ class DocumentCommand extends Command
                 fn (Collection $commands, array $namespaces) =>
                     $commands->filter(fn (array $command) => ! Str::startsWith($command['name'], $namespaces))
             )
-            // Signature filter
+            // signature filter
             ->when(
                 Config::get('documentor.include.signatures'),
                 fn (Collection $commands, array $signatures) =>

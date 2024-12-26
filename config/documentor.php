@@ -2,6 +2,8 @@
 
 return [
     'exclude' => [
+        'hidden' => true,
+
         'signatures' => [
             // list of command signatures to be excluded
         ],
