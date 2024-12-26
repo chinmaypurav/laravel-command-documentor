@@ -15,6 +15,8 @@ class DocumentCommand extends Command
 {
     protected $signature = 'doc:generate';
 
+    protected $hidden = true;
+
     protected $description = 'Generates the documentation for all the commands in the application.';
 
     protected Collection $assortedCommands;
