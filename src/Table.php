@@ -15,7 +15,7 @@ class Table
 
     private array $rowDataLengths = [];
 
-    public function __construct()
+    public function __construct(public string $namespace = '')
     {
         foreach ($this->headings as $heading) {
             $this->rowDataLengths[$heading] = min(strlen($heading), 3);
@@ -67,8 +67,8 @@ class Table
         return str_repeat('-', $count);
     }
 
-    public static function make(): static
+    public static function make(string $namespace): static
     {
-        return new self();
+        return new self($namespace);
     }
 }
