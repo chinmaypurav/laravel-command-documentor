@@ -3,8 +3,8 @@
     "description": "Laravel Artisan Command Documentor",
     "type": "library",
     "require": {
-        "illuminate/support": "^9|^10|^11",
-        "illuminate/console": "^9|^10|^11"
+        "illuminate/support": "^9|^10|^11|^12",
+        "illuminate/console": "^9|^10|^11|^12"
     },
     "license": "MIT",
     "autoload": {
